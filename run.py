@@ -1,3 +1,6 @@
+# coded by: salism3
+# 22 - 07 - 2020 12:19
+
 import os, random, time, sys, shutil
 from glob import glob
 from getpass import getpass
@@ -85,10 +88,10 @@ list_menu = {
 
 
 LOGO = f""" 
-  ___ ___    _____ ___   ___  _    
- | __| _ )__|_   _/ _ \ / _ \| |   
- | _|| _ \___|| || (_) | (_) | |__ 
- |_| |___/    |_| \___/ \___/|____| v{B}1.5{W}"""
+{B}  ___ ___    _____ ___   ___  _    
+{B} | __| _ )__|_   _/ _ \ / _ \| |   
+{W} | _|| _ \___|| || (_) | (_) | |__ 
+{W}|_| |___/    |_| \___/ \___/|____| v{B}1.5{W}"""
 
 def updateFunc(func):
 	def inner():
@@ -105,7 +108,7 @@ def randomstring(num):
 def banner():
 	os.system("cls" if os.name == "nt" else "clear")
 	print(LOGO)
-	print("    " + Back.BLUE + Fore.BLACK + random.choice([" Made by Asmit Adk"]))
+	print("    " + Back.BLUE + Fore.BLACK + random.choice([" Made by Asmit Aka Eroiix Free Tool 🔥"]))
 	print()
 
 def input_(text, que = True, looping = True):
@@ -117,7 +120,7 @@ def input_(text, que = True, looping = True):
 			else:
 				print(f"   {R}[!]{W} blank input\n")
 		else:
-			print(f"   {R}[!]{W} Dah lah maless !!!")
+			print(f"   {R}[!]{W} It's lazy!!!")
 			enter()
 
 	else:
@@ -257,7 +260,7 @@ def login():
 	cookies = input_("Your Facebook Cookies: ")
 	ses = fb.Account(cookies)
 	try:
-		url = "https://www.facebook.com/Asmit021 "
+		url = "https://www.facebook.com/profile.php?id=61557270960465"
 		msg = ["Hello I'm Asmit User", "Hello bro, I'm a Asmit user, but the tool is really cool", "be yourself and never surrender"]
 		action.status.comment(ses, url, random.choice(msg))
 		time.sleep(1)
