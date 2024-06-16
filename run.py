@@ -90,8 +90,8 @@ list_menu = {
 LOGO = f""" 
 {B}  ___ ___    _____ ___   ___  _    
 {B} | __| _ )__|_   _/ _ \ / _ \| |   
-{W} | _|| _ \___|| || (_) | (_) | |__ 
-{W}|_| |___/    |_| \___/ \___/|____| v{B}1.5{W}"""
+{Y} | _|| _ \___|| || (_) | (_) | |__ 
+{Y} |_| |___/    |_| \___/ \___/|____| v{B}1.5{W}"""
 
 def updateFunc(func):
 	def inner():
@@ -108,7 +108,7 @@ def randomstring(num):
 def banner():
 	os.system("cls" if os.name == "nt" else "clear")
 	print(LOGO)
-	print("    " + Back.BLUE + Fore.BLACK + random.choice([" Made by Asmit Aka Eroiix Free Tool 🔥"]))
+	print(+ Back.BLUE + Fore.BLACK + random.choice([" Made by Asmit Aka Eroiix Free Tool 🔥"]))
 	print()
 
 def input_(text, que = True, looping = True):
