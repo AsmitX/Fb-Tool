@@ -108,7 +108,7 @@ def randomstring(num):
 def banner():
 	os.system("cls" if os.name == "nt" else "clear")
 	print(LOGO)
-	print(+ Back.BLUE + Fore.BLACK + random.choice([" Made by Asmit Aka Eroiix Free Tool 🔥"]))
+	print(Back.BLUE + Fore.BLACK + random.choice([" Made by Asmit Aka Eroiix Free Tool 🔥"]))
 	print()
 
 def input_(text, que = True, looping = True):
