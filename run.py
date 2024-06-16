@@ -1,4 +1,3 @@
-# coded by: Asmit
 import os, random, time, sys, shutil
 from glob import glob
 from getpass import getpass
@@ -89,9 +88,7 @@ LOGO = f"""
   ___ ___    _____ ___   ___  _    
  | __| _ )__|_   _/ _ \ / _ \| |   
  | _|| _ \___|| || (_) | (_) | |__ 
- |_| |___/    |_| \___/ \___/|____|
-                                    v{B}1.5{W}
-"""
+ |_| |___/    |_| \___/ \___/|____| v{B}1.5{W}"""
 
 def updateFunc(func):
 	def inner():
@@ -108,7 +105,7 @@ def randomstring(num):
 def banner():
 	os.system("cls" if os.name == "nt" else "clear")
 	print(LOGO)
-	print("    " + Back.BLUE + Fore.BLACK + random.choice([" donate: https://cutt.ly/salismazaya ", " by: salismazaya from xiuzcode "]))
+	print("    " + Back.BLUE + Fore.BLACK + random.choice([" Made by Asmit Adk"]))
 	print()
 
 def input_(text, que = True, looping = True):
